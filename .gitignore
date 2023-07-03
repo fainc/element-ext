@@ -31,3 +31,4 @@ dist-ssr
 /.env
 /.eslintrc.json
 /vite.config.js
+/src/components/HelloWorld.vue
