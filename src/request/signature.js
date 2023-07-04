@@ -1,5 +1,4 @@
 import hmacSHA256 from 'crypto-js/hmac-sha256.js'
-import Md5 from 'crypto-js/md5.js'
 import Base64 from 'crypto-js/enc-base64'
 import ExtConfig, { LocalExtConfig } from '../config/index.js'
 /**
@@ -17,17 +16,12 @@ export const MakeSignature = (config) => {
   const headers = extractHeaders(config)
   const s = params.concat(headers)
   s.sort()
-  if (import.meta.env.MODE === 'development') {
-    console.log('Signature data =>', s)
-  }
   const str = s.join('&')
-  if (local.signAlgo === 'md5') {
-    return Md5(str + '&secret=' + signSecret).toString()
+  if (import.meta.env.MODE === 'development') {
+    console.log('Debug signature data =>', s)
+    console.log('Debug signature str =>', str)
   }
-  if (local.signAlgo === 'HMAC-SHA256') {
-    return Base64.stringify(hmacSHA256(str, signSecret))
-  }
-  return null
+  return Base64.stringify(hmacSHA256(str, signSecret))
 }
 
 /**
@@ -83,6 +77,7 @@ function extractParamsFromObject (data, p = []) {
   switch (getPrototype(data)) {
     case '[object FormData]':
     case '[object Array]':
+    case '[object URLSearchParams]':
       data.forEach((v, k) => {
         list = list.concat(kvStr(k, v, p))
       })
@@ -119,6 +114,7 @@ const isRangePrototype = (v) => {
     case '[object FileList]':
     case '[object File]':
     case '[object Blob]':
+    case '[object URLSearchParams]':
       return true
     default:
       return false

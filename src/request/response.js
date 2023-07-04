@@ -38,20 +38,24 @@ function showError (message, ext = '') {
 }
 
 export const HandleError = (error) => {
-  if (error?.response?.status === 401) {
+  if (!error?.response) {
+    showError(error?.message || '未知网络错误')
+    return error || '未知网络错误' // 无response返回最外层error错误
+  }
+  const {
+    message,
+    ext,
+    code
+  } = error?.response?.data || {}
+  if (error?.response?.status === 401 && code === 401) { // 401错误处理
     localStorage.removeItem('ext_token')
     window.location.reload()
     return '401 Unauthorized'
   }
-  const data = error?.response?.data
-  if (!data) {
-    showError(error?.message || '未知网络错误')
-    return error?.message || '未知网络错误'
+  if (message) {
+    showError(message, ext)
+    return message // data内有自定义message仅返回message错误信息
   }
-  const {
-    message,
-    ext
-  } = data
-  showError(message || '未知服务器错误', ext)
-  return message
+  showError(error?.message || '未知网络错误')
+  return error.response || '未知网络错误' // 无法读取到data或自定义message，返回完整response错误信息
 }

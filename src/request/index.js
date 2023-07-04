@@ -47,12 +47,15 @@ instance.interceptors.response.use(function (response) {
   }
   return HandleResponse(response)
 }, function (error) {
-  const { hideLoading, rejectError } = error?.config || {}
+  const { hideLoading, rejectError, originalResponse } = error?.config || {}
   if (!hideLoading) {
     LoadingTask(false)
   }
+  if (originalResponse) {
+    return error
+  }
   const errorMessage = HandleError(error)
-  if (!rejectError) { // 默认返回一个pending中的promise，请求不会进入catch中
+  if (error?.config && !rejectError) { // 默认返回一个pending中的promise，请求不会进入catch中（Invalid URL之类的底层错误读不到config，应当 reject）
     return new Promise(() => {})
   }
   return Promise.reject(errorMessage)
@@ -62,9 +65,7 @@ instance.interceptors.response.use(function (response) {
  * 暴露实例
  * @constructor
  */
-export const RequestInstance = () => {
-  return instance
-}
+export const RequestInstance = instance
 
 /**
  * 格式化请求方法

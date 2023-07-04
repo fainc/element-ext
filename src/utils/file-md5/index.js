@@ -14,13 +14,12 @@ const FileMD5 = (file) => {
       if (currentChunk < chunks) {
         loadNext()
       } else {
-        return resolve(spark.end())
+        return resolve(spark.end(false))
       }
     }
 
     fileReader.onerror = function () {
-      console.warn('oops, something went wrong.')
-      return reject(new Error('oops, something went wrong.'))
+      return reject(new Error('读取文件出错'))
     }
 
     function loadNext () {
