@@ -9,7 +9,7 @@ const ExtConfig = { // .env 静态配置
     originalHeader: import.meta.env.VITE_EXT_REQUEST_ORIGINALHEADER || false, // 默认进行header注入，支持单个请求config配置
     originalResponse: import.meta.env.VITE_EXT_REQUEST_ORIGINALRESPONSE || false, // 默认进行返回数据格式化并提示、校验错误（如401），支持单个请求config配置，需要原样返回response不进行任何提示或处理设置为true
     signHeaders: import.meta.env.VITE_EXT_REQUEST_SIGNHEADERS || 'App-Id,Authorization,Nonce,Timestamp', // 默认参与header注入签名的header字段
-    rejectError: import.meta.env.VITE_EXT_REQUEST_REJECTERROR || false// 默认不 reject error（无需catch，originalResponse=true除外），支持单个请求config配置
+    rejectError: import.meta.env.VITE_EXT_REQUEST_REJECTERROR || false// 默认不 reject error（无需catch，originalResponse=true除外，需要自行catch），支持单个请求config配置
   }
 }
 

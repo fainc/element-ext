@@ -3,10 +3,12 @@
  */
 import 'element-plus/dist/index.css'
 import '../css/common/fix.css'
-import Router from './router.js'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-export const Init = (app) => {
+import { InitRouter } from '../router'
+import I18n, { i18n } from '../i18n/index.js'
+export const Init = (app, notFoundView, loginView = null) => {
   app.use(ElementPlus, { size: 'default', zIndex: 2000, locale: zhCn })
-  app.use(Router)
+  app.use(InitRouter(notFoundView, loginView))
+  app.use(i18n)
 }

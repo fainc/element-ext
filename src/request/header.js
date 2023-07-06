@@ -1,6 +1,6 @@
 import { MakeSignature } from './signature.js'
 import { LocalExtConfig } from '../config/index.js'
-
+import I18n from '../i18n/index.js'
 /**
  * 随机请求字符串
  * @param e
@@ -24,6 +24,7 @@ export const HeaderSet = (config) => {
   if (token) {
     config.headers.set('Authorization', 'Bearer ' + token, false)
   }
+  config.headers.set('Accept-Language', I18n?.locale?.value || 'zh-CN') // 默认 随机请求字符串
   config.headers.set('Nonce', randomString(32), false) // 默认 随机请求字符串
   config.headers.set('App-Id', LocalExtConfig().request.appID, false) // 请求App-Id
   config.headers.set('Timestamp', new Date().getTime(), false) // 默认 请求时间戳

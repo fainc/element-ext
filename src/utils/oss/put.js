@@ -1,4 +1,4 @@
-import { Request } from '../../request/index.js'
+import Request from '../../request/index.js'
 
 /*
 OSS 签名PUT直传
@@ -6,7 +6,7 @@ OSS 签名PUT直传
  */
 
 export const OssPutSignedURL = (signedUrl, file, acl, contentType, md5, overwrite) => {
-  return Request('put', signedUrl, file, { headers: { 'x-oss-object-acl': acl, 'Content-Type': contentType, 'Content-MD5': md5, 'x-oss-forbid-overwrite': overwrite }, originalHeader: true, originalResponse: true })
+  return Request.Put(signedUrl, file, { headers: { 'x-oss-object-acl': acl, 'Content-Type': contentType, 'Content-MD5': md5, 'x-oss-forbid-overwrite': overwrite }, originalHeader: true, originalResponse: true })
 }
 
 // Oss 多文件并发Put上传 todo values 结果处理

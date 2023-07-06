@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
-import { Request } from '../../request/index.js'
+import Request from '../../request/index.js'
 
 const config = ref({
   title: '上传文件',

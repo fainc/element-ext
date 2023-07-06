@@ -3,6 +3,7 @@ import ExtConfig from '../config/index.js'
 import { LoadingTask } from './loading.js'
 import { HeaderSet } from './header.js'
 import { HandleResponse, HandleError } from './response.js'
+import { ElMessageBox } from 'element-plus'
 
 /**
  * 默认配置实例初始化
@@ -52,7 +53,7 @@ instance.interceptors.response.use(function (response) {
     LoadingTask(false)
   }
   if (originalResponse) {
-    return error
+    return Promise.reject(error)
   }
   const errorMessage = HandleError(error)
   if (error?.config && !rejectError) { // 默认返回一个pending中的promise，请求不会进入catch中（Invalid URL之类的底层错误读不到config，应当 reject）
@@ -62,37 +63,56 @@ instance.interceptors.response.use(function (response) {
 })
 
 /**
- * 暴露实例
+ * 暴露请求实例
  * @constructor
  */
 export const RequestInstance = instance
 
 /**
- * 格式化请求方法
- * @param method
+ * 格式化请求
  * @param uri
- * @param params
  * @param config
+ * @returns {{Delete: (function({}=): Promise<axios.AxiosResponse<any>>), Options: (function({}=): Promise<axios.AxiosResponse<any>>), Head: (function({}=): Promise<axios.AxiosResponse<any>>), Post: (function({}=): Promise<axios.AxiosResponse<any>>), Get: (function({}=): Promise<axios.AxiosResponse<any>>), Patch: (function({}=): Promise<axios.AxiosResponse<any>>), Put: (function({}=): Promise<axios.AxiosResponse<any>>)}}
  * @constructor
  */
-export const Request = (method, uri, params = {}, config = {}) => {
-  switch (method) {
-    case 'get':
-      return instance.get(uri, { params, ...config })
-    case 'delete':
-      return instance.delete(uri, { params, ...config })
-    case 'head':
-      return instance.head(uri, { params, ...config })
-    case 'options':
-      return instance.options(uri, { params, ...config })
-    case 'post':
-      return instance.post(uri, params, { ...config })
-    case 'put':
-      return instance.put(uri, params, { ...config })
-    case 'patch':
-      return instance.patch(uri, params, { ...config })
+const Request = {
+  Get (uri, params = {}, config = {}) {
+    return requestConfirm(config?.confirm).then(() => instance.get(uri, { params, ...config }))
+  },
+  Delete (uri, params = {}, config = {}) {
+    return requestConfirm(config?.confirm).then(() => instance.delete(uri, { params, ...config }))
+  },
+  Head (uri, params = {}, config = {}) {
+    return requestConfirm(config?.confirm).then(() => instance.head(uri, { params, ...config }))
+  },
+  Options (uri, params = {}, config = {}) {
+    return requestConfirm(config?.confirm).then(() => instance.options(uri, { params, ...config }))
+  },
+  Post (uri, params = {}, config = {}) {
+    return requestConfirm(config?.confirm).then(() => instance.post(uri, params, { ...config }))
+  },
+  Put (uri, params = {}, config = {}) {
+    return requestConfirm(config?.confirm).then(() => instance.put(uri, params, { ...config }))
+  },
+  Patch (uri, params = {}, config = {}) {
+    return requestConfirm(config?.confirm).then(() => instance.patch(uri, params, { ...config }))
   }
-  return new Promise(function (resolve, reject) {
-    return reject(new Error('请求method错误'))
+}
+const requestConfirm = (confirm) => {
+  if (!confirm) {
+    return Promise.resolve()
+  }
+  /** 新建promise消除确认提示的reject */
+  return new Promise((resolve) => {
+    ElMessageBox.confirm(
+      confirm,
+      // '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    ).then(() => resolve()).catch(() => {}) // 内部catch未确认
   })
 }
+export default Request
