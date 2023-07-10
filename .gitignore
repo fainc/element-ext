@@ -23,13 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 /public/
-/index.html
-/src/assets/vue.svg
-/src/App.vue
-/src/main.js
-/src/style.css
-/.env
-/.eslintrc.json
-/vite.config.js
-/src/components/HelloWorld.vue
-/test/
