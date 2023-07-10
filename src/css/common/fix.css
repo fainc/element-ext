@@ -1,8 +1,19 @@
 html,body{
     padding: 0;
     margin: 0;
+    font-size: 14px;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 /*解决element 按钮聚焦框问题*/
 *:focus {
     outline: none !important;
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+    body { background: #ffffff;}
+}
+/* 浅色模式 */
+@media (prefers-color-scheme: light) {
+    body { background: #ffffff; }
 }

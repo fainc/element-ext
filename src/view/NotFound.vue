@@ -1,23 +1,23 @@
 <template>
   <div class="not-found">
-    <div>
-      <el-image class="not-found-image" :src="imageUrl" fit="fill"/>
-    </div>
-    <div style="font-size: 24px;margin-bottom: 15px">
-      404
-    </div>
-    <div style="margin-bottom: 25px;color: rgba(0,0,0,.45);
-    font-size: 14px;line-height: 1.6">
-      {{$t('ext.404NotFound')}}
-    </div>
-    <div>
-      <el-button type="primary" @click="tes" class="back" plain> {{ $t('ext.GoBack') }}</el-button>
-    </div>
-    <div style="position: absolute;bottom: 50px;color: #999999">
+   <div class="not-found-main">
+     <div>
+       <el-image class="not-found-image" :src="imageUrl" fit="fill"/>
+     </div>
+     <div class="title">
+       404
+     </div>
+     <div class="desc">
+       {{$t('ext.404NotFound')}}
+     </div>
+     <div>
+       <el-button type="primary" @click="back" class="back" plain> {{ $t('ext.goBack') }}</el-button>
+     </div>
+   </div>
+    <div class="copyright">
       Copyright © {{ new Date().getFullYear() }} {{copyright}}
     </div>
   </div>
-
 </template>
 
 <script setup>
@@ -25,7 +25,6 @@ import image from '../assets/result/not-found.gif'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import EventReport from '../utils/event-report/index.js'
-import Request from '../request/index.js'
 const route = useRoute()
 const imageUrl = ref(`${image}`)
 const copyright = import.meta.env.VITE_EXT_COPYRIGHT || ''
@@ -35,26 +34,41 @@ onMounted(() => {
 const back = () => {
   window.history.back()
 }
-const tes = () => {
-  Request.Get('/hello', {}, { confirm: '确定删除吗，删除后无法找回' }).then(e => {
-    console.log(e)
-  })
-}
 </script>
 
 <style scoped>
 .not-found {
   position: relative;
   display: flex;
-  justify-content: center;
   height: 100vh;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
 }
+.not-found-main{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
 .not-found-image{
-  width: 252px;height: 252px
+  width: 252px;height: 252px;
+}
+.title{
+  font-size: 24px;margin:25px 0;
+}
+.desc{
+  color: rgba(0,0,0,.45);
+  margin: 0 25px 30px;
+  font-size: 14px;
 }
 .back{
   margin-top: 30px;
+}
+.copyright{
+  color: #A3A6AD;
+  font-size: 14px;
+  flex: 0 0 50px;
 }
 </style>

@@ -1,4 +1,21 @@
 {
   "404NotFound": "没有找到该页面或无访问权限",
-  "GoBack": "返回"
+  "goBack": "返回",
+  "login": {
+    "methodPassword": "密码登录",
+    "methodSms": "短信登录",
+    "account": "账号",
+    "password": "密码",
+    "accountPlaceholder": "请输入账号",
+    "passwordPlaceholder": "请输入密码",
+    "btn": "登录",
+    "legalNext": "下一个",
+    "legalAccept": "我已阅读并同意",
+    "legalAcceptAll": "我已全部阅读并同意"
+  },
+  "common":{
+    "close":"关闭",
+    "back": "返回",
+    "confirm": "确定"
+  }
 }
