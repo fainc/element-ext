@@ -2,15 +2,18 @@
 import Request from '../src/request/index.js'
 
 const getApi = () => {
-  Request.Get('http://rap2api.taobao.org/app/mock/303099/groupInfo/list', { id: 2 }, {
+  Request.Get('http://rap2api.taobao.org/app/mock/303099/groupInfo/list', { id: 1 }, {
     encrypt: true,
-    encryptMethod: 'sm2'
+    encryptMethod: 'rsa'
   }).then(res => {
 
   })
 }
 const postApi = () => {
-  Request.Post('http://rap2api.taobao.org/app/mock/303099/imageInfo/list', {}, { encrypt: true }).then(res => {
+  Request.Post('http://rap2api.taobao.org/app/mock/303099/imageInfo/list', { id: 3 }, {
+    encrypt: true,
+    encryptMethod: 'sm2'
+  }).then(res => {
 
   })
 }
