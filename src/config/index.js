@@ -20,10 +20,16 @@ const ExtConfig = { // .env 静态配置
  */
 export const LocalExtConfig = () => {
   return {
+    app: {
+      name: localStorage.getItem('ext_app_name') || import.meta.env.VITE_EXT_APPNAME || ''
+    },
     request: {
       appID: localStorage.getItem('ext_app_id') || import.meta.env.VITE_EXT_REQUEST_APPID || '', // 请求APPID
       signSecret: localStorage.getItem('ext_sign_secret') || import.meta.env.VITE_EXT_REQUEST_SIGNSECRET || '', // 请求签名密钥
       encryptSecret: localStorage.getItem('ext_encrypt_secret') || import.meta.env.VITE_EXT_REQUEST_ENCRYPTSECRET || '' // 请求加密密钥
+    },
+    router: {
+      loginId: localStorage.getItem('ext_login_id') || import.meta.env.VITE_EXT_ROUTER_LOGINID || 'index' // 登录路径ID
     }
   }
 }
