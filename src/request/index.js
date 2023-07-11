@@ -4,7 +4,7 @@ import { LoadingTask } from './loading.js'
 import { HeaderSet } from './header.js'
 import { HandleResponse, HandleError } from './response.js'
 import { ElMessageBox } from 'element-plus'
-
+import { crypto } from './crypto.js'
 /**
  * 默认配置实例初始化
  */
@@ -15,7 +15,8 @@ const defaultConfig = {
   hideLoading: conf.hideLoading,
   originalHeader: conf.originalHeader,
   originalResponse: conf.originalResponse,
-  rejectError: conf.rejectError
+  rejectError: conf.rejectError,
+  encryptMethod: conf.encryptMethod
 }
 const instance = axios.create(defaultConfig)
 
@@ -23,9 +24,35 @@ const instance = axios.create(defaultConfig)
  * 请求拦截处理
  */
 instance.interceptors.request.use(function (config) {
-  const { hideLoading, originalHeader } = config
+  const { hideLoading, originalHeader, encrypt, encryptMethod } = config
   if (!hideLoading) {
     LoadingTask(true)
+  }
+  if (encrypt) {
+  // 通过config.method判断传data或params
+    switch (config.method) {
+      case 'post':
+        config.data = Object.keys(config.data).length ? { data: crypto(config.data, encryptMethod) } : {}
+        break
+      case 'put':
+        config.data = Object.keys(config.data).length ? { data: crypto(config.data, encryptMethod) } : {}
+        break
+      case 'patch':
+        config.data = Object.keys(config.data).length ? { data: crypto(config.data, encryptMethod) } : {}
+        break
+      case 'get':
+        config.params = Object.keys(config.params).length ? { data: crypto(config.params, encryptMethod) } : {}
+        break
+      case 'delete':
+        config.params = Object.keys(config.params).length ? { data: crypto(config.params, encryptMethod) } : {}
+        break
+      case 'head':
+        config.params = Object.keys(config.params).length ? { data: crypto(config.params, encryptMethod) } : {}
+        break
+      case 'options':
+        config.params = Object.keys(config.params).length ? { data: crypto(config.params, encryptMethod) } : {}
+        break
+    }
   }
   if (!originalHeader) {
     config = HeaderSet(config)

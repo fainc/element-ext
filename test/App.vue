@@ -1,8 +1,26 @@
 <script setup>
+import Request from '../src/request/index.js'
+
+const getApi = () => {
+  Request.Get('http://rap2api.taobao.org/app/mock/303099/groupInfo/list', { id: 2 }, {
+    encrypt: true,
+    encryptMethod: 'sm2'
+  }).then(res => {
+
+  })
+}
+const postApi = () => {
+  Request.Post('http://rap2api.taobao.org/app/mock/303099/imageInfo/list', {}, { encrypt: true }).then(res => {
+
+  })
+}
 </script>
 
 <template>
+  <el-button @click="getApi">get</el-button>
+  <el-button @click="postApi">post</el-button>
   <router-view></router-view>
+
 </template>
 
 <style scoped>
@@ -12,9 +30,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
