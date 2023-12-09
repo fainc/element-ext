@@ -31,7 +31,7 @@ const handleLogin = () => {
 
 <style scoped>
 .login-form{
-  padding: 20px 0;
+  padding: 20px 0 0;
 }
 .form-input{
   width: 100%;

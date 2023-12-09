@@ -1,21 +1,16 @@
 <script setup>
+
 import { ref } from 'vue'
-import I18n from '../../i18n/index.js'
-import IFrameDialog from '../iframe/iframe-dialog.vue'
 import LoginPassword from './form/login-password.vue'
 import { useRoute, useRouter } from 'vue-router'
-const iframeRef = ref()
+const copyright = import.meta.env.VITE_EXT_COPYRIGHT || ''
+const appName = import.meta.env.VITE_EXT_APPNAME || ''
+const appDesc = import.meta.env.VITE_EXT_APPDESC || ''
 const props = defineProps({
   method: {
     type: Array,
     default: () => {
       return ['password']
-    }
-  },
-  legal: {
-    type: Array,
-    default: () => {
-      return [] // [{name:'xxx',href:'xxx','target':'_blank/popup'}]
     }
   },
   uri: {
@@ -28,8 +23,6 @@ const props = defineProps({
 const route = useRoute()
 const router = useRouter()
 const methodName = ref(props.method[0])
-const legalChecked = ref(false)
-const notTrustChecked = ref(false)
 const handleMethodClick = (e) => {
   console.log(e)
 }
@@ -45,20 +38,14 @@ const loginSuccess = (token) => {
     router.back()
   }
 }
-const openIframe = (i, e) => {
-  iframeRef.value.Open(i, '', e, i === props.legal.length - 1 ? I18n.t('ext.login.legalAcceptAll') : I18n.t('ext.login.legalNext') + ' ' + props.legal[i + 1].name)
-}
-const iframeConfirm = (i) => {
-  if (i === props.legal.length - 1) {
-    legalChecked.value = true
-  } else {
-    openIframe(i + 1, props.legal[i + 1].href)
-  }
-}
 </script>
 
 <template>
 <div class="main">
+ <div class="app-title" v-if="appName || appDesc">
+   <div class="app-name" v-if="appName">{{appName}}</div>
+   <div class="app-desc" v-if="appDesc">{{appDesc}}</div>
+ </div>
   <div class="login-window">
       <div class="login-method">
         <el-tabs v-model="methodName" class="demo-tabs" @tab-click="handleMethodClick">
@@ -71,22 +58,13 @@ const iframeConfirm = (i) => {
             </el-tab-pane>
           </template>
         </el-tabs>
+        <slot name="footer"></slot>
+        <div class="copyright">
+          Copyright © {{ new Date().getFullYear() }} {{copyright}}
+        </div>
       </div>
-      <div class="legal" v-if="props.legal.length !== 0">
-        <el-checkbox v-model="legalChecked" label="" size="large" class="legal-check" />
-        {{$t('ext.login.legalAccept')}}
-        <template v-for="(item,i) in props.legal" :key="i">
-          {{i === 0 ?'&nbsp;':',&nbsp;'}}<el-link @click="openIframe(i,item.href)"  class="legal-item">{{ item.name }}</el-link>
-        </template>
-      </div>
-    <div class="legal" v-if="props.legal.length !== 0">
-      <el-checkbox v-model="notTrustChecked" label="" size="large" class="legal-check" />
-     这是临时设备，缩短登录有效期并开启自动退出
-    </div>
-
   </div>
 </div>
-  <i-frame-dialog ref="iframeRef"  @confirm="iframeConfirm"/>
 </template>
 
 <style scoped>
@@ -105,19 +83,22 @@ const iframeConfirm = (i) => {
   box-shadow: 0 1px 12px 0 rgba(0, 0, 0, 0.1);
   width: 336px;
 }
-.legal{
+.copyright{
   font-size: 12px;
-  display: flex;
-  align-items: center;
-  color: #909399;
-  flex-wrap: wrap;
+  color: #A3A6AD;
+  text-align: right;
 }
-.legal-check{
-  margin-right: 8px;
-  height: 14px;
+.app-title{
+  padding-bottom: 50px;
 }
-.legal-item{
-  font-size: 12px;
-line-height: normal;
+.app-name{
+  font-size: 30px;
+  padding-bottom: 10px;
+  color: #333333;
+  text-align: center;
+}
+.app-desc{
+  text-align: center;
+  color: #888888;
 }
 </style>

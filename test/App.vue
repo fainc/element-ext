@@ -20,8 +20,6 @@ const postApi = () => {
 </script>
 
 <template>
-  <el-button @click="getApi">get</el-button>
-  <el-button @click="postApi">post</el-button>
   <router-view></router-view>
 
 </template>
